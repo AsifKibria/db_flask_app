@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <body>
+<title>Welcome to the world GDP vs Literacy comparison</title>
+<form action="{{ url_for('lit_v_gdp_vew_post') }}" method="post">
+    Enter Number of countries to compare: 
+    <input type="text" name="n"t>
+    <input type="submit">
+  </form>
+</body>
+</html>
+<script>
+    function gdp_vs_literacy() {
+        var xmlHttp = new XMLHttpRequest();
+        var formData = new FormData(document.querySelector('form'))
+        const n = formData.get('n');
+        xmlHttp.open( "GET", `http://localhost:5000literacy_vs_gdp/${n}`, false ); // false for synchronous request
+        xmlHttp.send( null );
+        return xmlHttp.responseText;
+    }
+</script>

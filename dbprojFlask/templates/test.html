@@ -1,0 +1,25 @@
+<!doctype html>
+<head>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<title>Welcome to the world GDP vs Literacy comparison</title>
+<form onsubmit="gdp_vs_literacy()">
+    Enter Number of countries: <input type="text">
+    <input type="submit">
+  </form>
+{% if data.shape[0] !=0  %}
+<div class="table-container">
+<table class="table">
+{% for row in range(data.shape[0]) %}
+<tr>
+    {% for col in data.columns %}
+      <td>{{data[col][row]}}</td>
+    {% endfor %}
+</tr>
+  {% endfor %}
+</table>
+</div>
+
+{% else %}
+  <h1>Hello, World!</h1>
+{% endif %}
