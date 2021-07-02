@@ -5,8 +5,9 @@ from flask import g
 from datasets import DataLoader
 from create import create_tables
 from insert import insert_Co2_emission, insert_education, insert_gdp, insert_population_growth, insert_population_total
-from queries import getAllEducationData, getLiteracyVsGdp
+from queries import getAllEducationData, getLiteracyVsGdp, literacyVsGrowth, literacyVsEmissions
 from flask import render_template
+
 DATABASE = 'data.db'
 dataLoader = DataLoader()
 app = Flask(__name__)
@@ -22,19 +23,49 @@ def hello_world():
 # def lit_v_gdp_vew_get():
 #     return render_template('gdpliteracy.html')
 
+# routes for the views
 
 @app.route("/literacy_vs_gdp/view", methods=['POST', 'GET'])
 def lit_v_gdp_vew_post():
     if request.method == 'GET':
-        return render_template('gdpliteracy.html')
+        return render_template('form.html', act='lit_v_gdp_vew_post', title='GDP')
     n = request.form['n']
     return redirect(url_for('lit_v_gdp', n=n))
 
 
+@app.route("/literacy_vs_emissions/view", methods=['POST', 'GET'])
+def lit_v_gdp_emissions_post():
+    if request.method == 'GET':
+        return render_template('form.html', act='lit_v_gdp_emissions_post', title='Emissions')
+    n = request.form['n']
+    return redirect(url_for('lit_v_emissions', n=n))
+
+
+@app.route("/literacy_vs_population_growth/view", methods=['POST', 'GET'])
+def lit_v_gdp_growth_post():
+    if request.method == 'GET':
+        return render_template('form.html', act='lit_v_gdp_growth_post', title='Population Growth')
+    n = request.form['n']
+    return redirect(url_for('lit_v_growth', n=n))
+
+
+# routes for charts
 @app.route("/literacy_vs_gdp/<n>")
 def lit_v_gdp(n=None):
     db = get_db().cursor()
     return getLiteracyVsGdp(db, n)
+
+
+@app.route("/emissions/<n>")
+def lit_v_emissions(n=None):
+    db = get_db().cursor()
+    return literacyVsEmissions(db, n)
+
+
+@app.route("/population_growth/<n>")
+def lit_v_growth(n=None):
+    db = get_db().cursor()
+    return literacyVsGrowth(db, n)
 
 
 @app.route("/test")
