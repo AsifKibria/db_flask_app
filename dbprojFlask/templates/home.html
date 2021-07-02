@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>Welcome to FU Berlin 2021 Databases Project</h1>
+            <ul>
+                {% for link,description in menu %}
+                <li><a href="{{ url_for(link) }}"> {{ description }}</a></li>
+                {% endfor %}
+            </ul>
+    </body>
+</html>

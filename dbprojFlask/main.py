@@ -7,23 +7,23 @@ from create import create_tables
 from insert import insert_Co2_emission, insert_education, insert_gdp, insert_population_growth, insert_population_total
 from queries import getAllEducationData, getLiteracyVsGdp, literacyVsGrowth, literacyVsEmissions
 from flask import render_template
-
+import pandas as pd
 DATABASE = 'data.db'
 dataLoader = DataLoader()
 app = Flask(__name__)
 
 
-@app.route("/")
-def hello_world():
+@app.route("/", methods=['GET'])
+def home():
+    # add the route names here
+    # the route name is not the string but the name of the route method
     initDB()
-    return "<p>Hello, World!</p>"
-
-
-# @app.route("/literacy_vs_gdp/view", methods=['GET'])
-# def lit_v_gdp_vew_get():
-#     return render_template('gdpliteracy.html')
+    menu = [('lit_v_gdp_vew_post', 'Literacy Vs GDP'),
+            ('lit_v_gdp_emissions_post', 'Literacy Vs Emissions'), ('lit_v_gdp_growth_post', 'Literacy Vs Growth')]
+    return render_template('home.html', menu=menu)
 
 # routes for the views
+
 
 @app.route("/literacy_vs_gdp/view", methods=['POST', 'GET'])
 def lit_v_gdp_vew_post():
@@ -83,6 +83,10 @@ def get_db():
 
 def initDB():
     db = get_db()
+    if not shouldInitDB(db.cursor()):
+        print('Will not be initing db ')
+        return
+    print('Initing the db ')
     create_tables(db)
     insert_population_total(db, dataLoader.population_total)
     insert_population_growth(db, dataLoader.population_growth)
@@ -91,3 +95,18 @@ def initDB():
     insert_gdp(db, dataLoader.gdp)
 
     db.commit()
+
+
+def shouldInitDB(cursor):
+    try:
+        cursor.execute(""" 
+            SELECT * 
+            FROM Education 
+            LIMIT 1
+
+        """)
+        test = pd.DataFrame(cursor.fetchall(), columns=[
+            'Country', 'Datum', 'Value', 'CountryCode'])
+        return not (test.shape[0] == 1)
+    except:
+        return True
