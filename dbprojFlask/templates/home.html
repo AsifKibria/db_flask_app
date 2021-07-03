@@ -4,11 +4,20 @@
 
     </head>
     <body>
-        <h1>Welcome to FU Berlin 2021 Databases Project</h1>
+        <h1>Welcome to FU Berlin Summer Semester 2021 Databases Project</h1>
+            <hr>
+            Select a Menu Below to View the Data
             <ul>
                 {% for link,description in menu %}
                 <li><a href="{{ url_for(link) }}"> {{ description }}</a></li>
                 {% endfor %}
+            </ul>
+            <hr>
+            <h3>Group Members</h3>
+            <ul>
+                <li>ALEKSANDER MAKO (5507253)</li>
+                <li>MD GOLAM KIBRIA ASIF (5506220)​</li>
+                <li>SAID YASIN (5502177)​</li>
             </ul>
     </body>
 </html>
